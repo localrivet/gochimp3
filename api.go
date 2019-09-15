@@ -37,14 +37,15 @@ type API struct {
 }
 
 // New creates a API
-func New(apiKey string) *API {
+func New(apiKey string, user string, host string) *API {
 	u := url.URL{}
 	u.Scheme = "https"
-	u.Host = fmt.Sprintf(URIFormat, DatacenterRegex.FindString(apiKey))
+	// u.Host = fmt.Sprintf(URIFormat, DatacenterRegex.FindString(apiKey))
+	u.Host = host
 	u.Path = Version
 
 	return &API{
-		User:     "gochimp3",
+		User:     user,
 		Key:      apiKey,
 		endpoint: u.String(),
 	}
@@ -92,7 +93,7 @@ func (api API) Request(method, path string, params QueryParams, body, response i
 			}
 		}
 		req.URL.RawQuery = queryParams.Encode()
-		
+
 		if api.Debug {
 			log.Printf("Adding query params: %q\n", req.URL.Query())
 		}
